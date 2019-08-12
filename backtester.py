@@ -15,8 +15,8 @@ import pandas as pd
 
 # Replace these with your API connection info from the dashboard
 base_url = 'https://paper-api.alpaca.markets'
-api_key_id = 'replace me'
-api_secret = 'replace me'
+api_key_id = 'PK3IJIUVKV5LS5NTD5GW'
+api_secret = 'oypm2et3zPvEA35er7NHagdihl/QxgEfpBEFsOVX'
 
 api = tradeapi.REST(
     base_url=base_url,
@@ -87,12 +87,12 @@ if __name__ == "__main__":
     ticker='LABU'
     resampleRate='15min'
     qty=100
-    startTime= datetime.strptime('2019-08-7 8:30:00.000000', '%Y-%m-%d %H:%M:%S.%f').astimezone(local_timezone)
-    endTime= datetime.strptime('2019-08-9 15:00:00.000000', '%Y-%m-%d %H:%M:%S.%f').astimezone(local_timezone)
-    historyStartTime = startTime - timedelta(days=2) # for some reason macd calulation start with some 2 hours offset
+    backTestingStartTime= datetime.strptime('2019-08-7 8:30:00.000000', '%Y-%m-%d %H:%M:%S.%f').astimezone(local_timezone)
+    backTestingEndTime= datetime.strptime('2019-08-9 15:00:00.000000', '%Y-%m-%d %H:%M:%S.%f').astimezone(local_timezone)
+    historyStartTime = backTestingStartTime - timedelta(days=2) # for some reason macd calulation start with some 2 hours offset
 
     #collect history
-    history = get_history_data(ticker, historyStartTime, endTime, resampleRate)
+    history = get_history_data(ticker, historyStartTime, backTestingEndTime, resampleRate)
     print (history)
     
     #collect study data
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     print (signal)
     
     #back test 
-    profitLoss, buyTime, buyPrice, sellTime, sellPrice = backTest(history, qty, signal, startTime,endTime)
+    profitLoss, buyTime, buyPrice, sellTime, sellPrice = backTest(history, qty, signal, backTestingStartTime,backTestingEndTime)
     print ('profitLoss',profitLoss)
     
     #Plot
@@ -111,5 +111,5 @@ if __name__ == "__main__":
     ax[0].scatter(sellTime,sellPrice,marker='o',c='red')
     ax[1].plot(macd.index, macd, label='MACD', color = 'blue')
     ax[1].plot(signalline.index, signalline, label='Signal Line', color='yellow')
-    ax[1].set_xlabel('profitloss of {} qty {} between {} and {}'.format(round(profitLoss,2),qty,startTime,endTime))
+    ax[1].set_xlabel('profitloss of {} for qty {} between {} and {}'.format(round(profitLoss,2),qty,backTestingStartTime,backTestingEndTime))
     plt.show() 
