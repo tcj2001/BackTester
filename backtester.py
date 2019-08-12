@@ -15,8 +15,8 @@ import pandas as pd
 
 # Replace these with your API connection info from the dashboard
 base_url = 'https://paper-api.alpaca.markets'
-api_key_id = 'PK3IJIUVKV5LS5NTD5GW'
-api_secret = 'oypm2et3zPvEA35er7NHagdihl/QxgEfpBEFsOVX'
+api_key_id = 'replace me'
+api_secret = 'replace me'
 
 api = tradeapi.REST(
     base_url=base_url,
